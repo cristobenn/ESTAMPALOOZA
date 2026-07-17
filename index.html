@@ -130,6 +130,7 @@
       <button onClick="{{ setAdultos }}" style="padding:12px 30px; border-radius:999px; cursor:pointer; font:800 13px 'Conto'; letter-spacing:.1em; text-transform:uppercase; background:{{ adultosBg }}; color:{{ adultosColor }}; border:1.5px solid var(--lime,#c6f21a); transition:all .2s ease;">ADULTOS</button>
       <button onClick="{{ setInfantil }}" style="padding:12px 30px; border-radius:999px; cursor:pointer; font:800 13px 'Conto'; letter-spacing:.1em; text-transform:uppercase; background:{{ infantilBg }}; color:{{ infantilColor }}; border:1.5px solid var(--lime,#c6f21a); transition:all .2s ease;">INFANTIL</button>
     </div>
+    <div style="text-align:center; margin:0 0 22px;"><span style="font:800 15px 'Conto'; letter-spacing:.16em; color:#f2efe8; text-transform:uppercase;">Productos más pedidos</span></div>
     <div id="prod-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px;">
       <sc-if value="{{ showAdultos }}" hint-placeholder-val="{{ true }}">
       <div style="display:flex; flex-direction:column; background:linear-gradient(180deg,#161614,#0e0e0c); border:1px solid rgba(255,255,255,.07); border-radius:24px; overflow:hidden; order:0;">
@@ -186,6 +187,34 @@
         </div>
       </div>
     </div>
+    <div style="text-align:center; margin-top:34px;">
+      <button onClick="{{ openModal }}" style="display:inline-flex; align-items:center; gap:10px; padding:15px 30px; border-radius:999px; cursor:pointer; background:transparent; border:1.5px solid var(--lime,#c6f21a); color:var(--lime,#c6f21a); font:800 13px 'Conto'; letter-spacing:.08em; text-transform:uppercase; transition:all .2s ease;" style-hover="background:var(--lime,#c6f21a); color:#0a0a09;">Descubrí todos los artículos<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    </div>
+
+    <sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeModal }}" style="position:fixed; inset:0; z-index:200; background:rgba(6,6,5,.82); backdrop-filter:blur(6px); display:flex; align-items:flex-start; justify-content:center; padding:5vh 16px; overflow:auto;">
+      <div onClick="{{ stopProp }}" style="width:100%; max-width:760px; background:linear-gradient(180deg,#161614,#0e0e0c); border:1px solid rgba(255,255,255,.1); border-radius:24px; box-shadow:0 30px 90px rgba(0,0,0,.6); overflow:hidden;">
+        <div style="position:sticky; top:0; display:flex; align-items:center; gap:14px; padding:20px 22px; background:#131312; border-bottom:1px solid rgba(255,255,255,.08); z-index:2;">
+          <div>
+            <div style="font:700 11px 'Conto'; letter-spacing:.3em; color:var(--lime,#c6f21a);">CATÁLOGO</div>
+            <div style="font:800 18px 'Conto'; color:#f2efe8; text-transform:uppercase;">Todos los artículos</div>
+          </div>
+          <button onClick="{{ closeModal }}" aria-label="Cerrar" style="margin-left:auto; flex:none; width:40px; height:40px; border-radius:50%; border:1px solid rgba(255,255,255,.16); background:#1c1c1a; color:#f2efe8; cursor:pointer; display:grid; place-items:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+        </div>
+        <div style="padding:18px; display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:12px;">
+          <sc-for list="{{ products }}" as="item" hint-placeholder-count="6">
+            <div style="display:flex; align-items:center; gap:14px; background:#0f0f0d; border:1px solid rgba(255,255,255,.07); border-radius:16px; padding:12px;">
+              <div style="flex:none; width:64px; height:64px; border-radius:12px; overflow:hidden; background:radial-gradient(60% 60% at 50% 45%, rgba(198,242,26,.1), transparent 70%), #0a0a09; display:grid; place-items:center;"><img src="{{ item.img }}" alt="{{ item.name }}" style="max-width:82%; max-height:82%; object-fit:contain;"></div>
+              <div style="min-width:0;">
+                <div style="font:800 14px 'Conto'; letter-spacing:.04em; color:#f2efe8; text-transform:uppercase;">{{ item.name }}</div>
+                <div style="font:400 12.5px/1.4 'Conto'; color:#8f8c85; text-wrap:pretty;">{{ item.desc }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+    </sc-if>
   </section>
 
   <!-- ================= CÓMO FUNCIONA ================= -->
@@ -384,8 +413,26 @@
   &quot;heroVideoUrl&quot;: {&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://i.imgur.com/zhmIvCD.mp4&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Hero&quot;}
 }">
 class Component extends DCLogic {
-  state = { audience: 'adultos' };
+  state = { audience: 'adultos', modalOpen: false };
   videoRef = React.createRef();
+  ph = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><rect width="80" height="80" fill="#0d0d0b"/><g fill="none" stroke="#c6f21a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M25 30h20l3 24H22z"/><path d="M30 30a5 5 0 0 1 10 0"/></g><circle cx="52" cy="26" r="9" fill="#c6f21a"/><path d="M48 26h8M52 22v8" stroke="#0d0d0b" stroke-width="2.4" stroke-linecap="round"/></svg>');
+  get products() {
+    const ph = this.ph;
+    return [
+      { name: 'REMERAS', desc: 'Estampas full color de alta calidad.', img: './prod-remera.png' },
+      { name: 'GORROS', desc: 'Dale un estilo único y tenés un nuevo accesorio.', img: './prod-gorro.png' },
+      { name: 'VASOS', desc: 'Resistentes y con diseños increíbles.', img: './prod-vaso.png' },
+      { name: 'MOCHILAS', desc: 'Bolso tuneado a tu gusto para llevar todo.', img: './prod-mochila.png' },
+      { name: 'PUZZLES', desc: 'Rompecabezas con las fotos favoritas. (Editable)', img: ph },
+      { name: 'BUZOS', desc: 'Abrigate con tu diseño único. (Editable)', img: ph },
+      { name: 'TOTE BAGS', desc: 'Bolsas de tela prácticas y cancheras. (Editable)', img: ph },
+      { name: 'STICKERS', desc: 'Calcos personalizados para pegar donde quieras. (Editable)', img: ph },
+      { name: 'LLAVEROS', desc: 'Un recuerdo chiquito para llevar siempre. (Editable)', img: ph },
+      { name: 'ALMOHADONES', desc: 'Suaves y con la foto que elijas. (Editable)', img: ph },
+      { name: 'POSAVASOS', desc: 'El detalle perfecto para la mesa. (Editable)', img: ph },
+      { name: 'CUADERNOS', desc: 'Tapas personalizadas a tu estilo. (Editable)', img: ph },
+    ];
+  }
   componentDidMount() {
     const v = this.videoRef.current;
     if (v) {
@@ -406,6 +453,11 @@ class Component extends DCLogic {
     return {
       showAdultos: a,
       showInfantil: !a,
+      modalOpen: this.state.modalOpen,
+      products: this.products,
+      openModal: () => this.setState({ modalOpen: true }),
+      closeModal: () => this.setState({ modalOpen: false }),
+      stopProp: (e) => { e.stopPropagation(); },
       setAdultos: () => this.setState({ audience: 'adultos' }),
       setInfantil: () => this.setState({ audience: 'infantil' }),
       gorrosOrder: a ? 2 : 4,
