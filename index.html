@@ -36,6 +36,8 @@
   @keyframes marqueeSlide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
   @keyframes floatZeroG{0%{transform:translate(0,0) rotate(-2deg)}25%{transform:translate(4px,-10px) rotate(1.5deg)}50%{transform:translate(-3px,-16px) rotate(-1deg)}75%{transform:translate(-6px,-6px) rotate(2deg)}100%{transform:translate(0,0) rotate(-2deg)}}
   @media(max-width:680px){
+    #hero-video{position:static !important; height:auto !important; width:100% !important; aspect-ratio:16/9; object-fit:cover; margin:2px 0 6px !important; -webkit-mask-image:linear-gradient(to bottom, #000 52%, transparent 100%) !important; mask-image:linear-gradient(to bottom, #000 52%, transparent 100%) !important;}
+    #hero-overlay{display:none !important}
     #ideal-grid{grid-template-columns:repeat(2,1fr) !important}
     #ideal-grid>div:last-child{grid-column:span 2; aspect-ratio:16/8 !important}
     #prod-grid{grid-template-columns:repeat(2,1fr) !important; gap:12px !important}
@@ -53,10 +55,10 @@
 
   <!-- ================= HERO ================= -->
   <header id="inicio" style="position:relative; overflow:hidden;">
-    <video autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" preload="auto" ref="{{ videoRef }}" style="position:absolute; top:0; right:0; height:100%; width:auto; -webkit-mask-image:linear-gradient(to right, transparent 0, #000 32%); mask-image:linear-gradient(to right, transparent 0, #000 32%);"></video>
-    <div style="position:absolute; inset:0; pointer-events:none; background:linear-gradient(to right, #0a0a09 28%, rgba(10,10,9,.96) 42%, rgba(10,10,9,.55) 60%, rgba(10,10,9,.12) 82%, rgba(10,10,9,0)), linear-gradient(to bottom, rgba(10,10,9,.4), transparent 28%, transparent 74%, rgba(10,10,9,.7)), radial-gradient(900px 480px at 80% -10%, rgba(255,47,126,.12), transparent 60%);"></div>
+    <div id="hero-overlay" style="position:absolute; inset:0; pointer-events:none; background:linear-gradient(to right, #0a0a09 28%, rgba(10,10,9,.96) 42%, rgba(10,10,9,.55) 60%, rgba(10,10,9,.12) 82%, rgba(10,10,9,0)), linear-gradient(to bottom, rgba(10,10,9,.4), transparent 28%, transparent 74%, rgba(10,10,9,.7)), radial-gradient(900px 480px at 80% -10%, rgba(255,47,126,.12), transparent 60%);"></div>
     <div style="position:relative; z-index:2; max-width:1220px; margin:0 auto; padding:10px clamp(20px,4vw,32px) clamp(36px,5vw,54px); text-align:left;">
       <img src="https://i.imgur.com/vrhgsLS.png" alt="ESTAMPALOOZA" style="display:block; width:min(680px,88vw); height:auto; margin:0 0 26px; filter:drop-shadow(0 0 18px rgba(198,242,26,.55)) drop-shadow(0 0 46px rgba(198,242,26,.3)) drop-shadow(0 4px 24px rgba(0,0,0,.6));">
+      <video id="hero-video" autoPlay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" preload="auto" ref="{{ videoRef }}" style="position:absolute; top:0; right:0; height:100%; width:auto; -webkit-mask-image:linear-gradient(to right, transparent 0, #000 32%); mask-image:linear-gradient(to right, transparent 0, #000 32%);"></video>
 
       <h1 style="font-family:'Conto',sans-serif; font-weight:900; font-size:clamp(24px,5.6vw,40px); line-height:1.05; letter-spacing:-.01em; margin:0 0 14px; text-transform:uppercase; color:#f2efe8; text-shadow:0 2px 14px rgba(0,0,0,.7);">
         PERSONALIZACIÓN DE ESTAMPADOS <span style="font-style:italic; color:var(--lime,#c6f21a);">EN VIVO</span><br>PARA FIESTAS Y EVENTOS
